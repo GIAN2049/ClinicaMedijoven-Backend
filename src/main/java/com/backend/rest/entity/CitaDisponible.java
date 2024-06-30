@@ -1,5 +1,6 @@
 package com.backend.rest.entity;
 
+import java.time.LocalTime;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -33,15 +34,14 @@ public class CitaDisponible {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	private Date fechaCita;
 	
-	@Column(name = "hora")
-	@Temporal(TemporalType.TIMESTAMP)
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "hh:mm:ss")
-	private Date hora;
+	@Column(name = "hora_cita")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss")
+	private LocalTime hora;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_medico")
 	private Medico medico;
 	
 	@Column(name = "is_reservado")
-	private boolean esReservado;
+	private boolean isReservado;
 }
