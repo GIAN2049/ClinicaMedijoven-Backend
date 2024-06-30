@@ -29,4 +29,6 @@ public class Medicamento {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_categoria")
 	private Categoria categoria;
+	
+
 }
