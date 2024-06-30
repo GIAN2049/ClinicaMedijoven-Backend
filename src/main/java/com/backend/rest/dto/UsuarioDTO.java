@@ -21,9 +21,7 @@ public class UsuarioDTO {
 	
 	private String password;
 	
-	private int idRol;
+	private RolDTO rol;
 	
 	private String sexo;
-
-
 }
