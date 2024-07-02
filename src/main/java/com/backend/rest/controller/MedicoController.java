@@ -76,40 +76,37 @@ public class MedicoController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<?> saveUserWithMedico(@RequestBody MedicoDTO medico){
+    public ResponseEntity<?> registrarMedico(@RequestBody MedicoDTO medicoDTO) {
 		try {
-			MedicoDTO medicoDto = service.addUsuerWithMedico(medico);
+			MedicoDTO medicoRegistrado = service.registrarMedico(medicoDTO);
 			
 			return new ResponseEntity<>(MensajeResponse.builder()
-						.mensaje("Medico Registrado")
-						.object(medicoDto).build(), HttpStatus.OK
-					);
+					.mensaje("Medico Registrado")
+					.object(medicoRegistrado).build(), HttpStatus.OK
+				);
 		} catch (Exception e) {
 			return new ResponseEntity<>(MensajeResponse.builder()
 					.mensaje(e.getMessage())
 					.object(null).build(), HttpStatus.INTERNAL_SERVER_ERROR
 				);
 		}
-		
-	}
+        
+        
+    }
 	
 	@PutMapping("/actualizar")
-	public ResponseEntity<?> updateUserWithMedico(@RequestBody MedicoDTO bean){
-	
-		Optional<MedicoDTO> existMedico = service.getMedicoId(bean.getUsuario().getId(), bean.getId());
-
-		if(existMedico.isPresent()) {
-			
-			MedicoDTO updateMedico = service.addUsuerWithMedico(bean);
-			return new ResponseEntity<>(MensajeResponse.builder()
-					.mensaje("Medico Actualizado Correctamente")
-					.object(updateMedico).build(), HttpStatus.OK
-				);
-			
+    public ResponseEntity<?> actualizarMedico(@RequestBody MedicoDTO medicoDTO) {
+		Medico medicoExist = service.buscarPorId(medicoDTO.getId());
+		if(medicoExist == null) {
+			throw new ModeloNotFoundException("El paciente con id: "+medicoDTO.getId()+" no existe");
 		} else {
-			throw new ModeloNotFoundException("El medico con id: "+bean.getId()+" no existe");
+			MedicoDTO medicoActualizado =  service.actualizarMedico(medicoDTO);
+			return new ResponseEntity<>(MensajeResponse.builder()
+					.mensaje("Paciente Actualizado Correctamente")
+					.object(medicoActualizado).build(), HttpStatus.OK
+				);
 		}
-	}
+    }
 	
 	@Transactional
 	@DeleteMapping("/{id}")
