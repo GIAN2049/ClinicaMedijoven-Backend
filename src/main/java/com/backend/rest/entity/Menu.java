@@ -24,7 +24,9 @@ public class Menu {
 	private Integer id;
 	private String nombre;
 	private String icon;
+	private String link;
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "menu")
     private List<MenuItem> items;
     
