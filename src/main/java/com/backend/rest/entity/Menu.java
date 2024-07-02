@@ -1,9 +1,14 @@
 package com.backend.rest.entity;
 
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,4 +24,11 @@ public class Menu {
 	private Integer id;
 	private String nombre;
 	private String icon;
+	
+	@OneToMany(mappedBy = "menu")
+    private List<MenuItem> items;
+    
+    @JsonIgnore
+    @OneToMany(mappedBy = "menu")
+    private List<Acceso> accesos;
 }
