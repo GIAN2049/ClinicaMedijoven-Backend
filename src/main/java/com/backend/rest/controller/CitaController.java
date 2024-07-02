@@ -17,7 +17,7 @@ import com.backend.rest.serviceImpl.CitaService;
 import com.backend.rest.utils.MensajeResponse;
 
 @RestController
-@RequestMapping("apiClinica/citas")
+@RequestMapping("/apiClinica/citas")
 public class CitaController {
 
     @Autowired

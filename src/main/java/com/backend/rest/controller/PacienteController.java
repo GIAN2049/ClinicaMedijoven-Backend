@@ -29,7 +29,7 @@ import com.backend.rest.utils.ModeloNotFoundException;
 import jakarta.transaction.Transactional;
 
 @RestController
-@RequestMapping("apiClinica/pacientes")
+@RequestMapping("/apiClinica/pacientes")
 public class PacienteController {
 
 	

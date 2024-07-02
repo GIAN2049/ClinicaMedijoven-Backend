@@ -14,7 +14,7 @@ import com.backend.rest.serviceImpl.CitaDisponibleService;
 import com.backend.rest.utils.MensajeResponse;
 
 @RestController
-@RequestMapping("apiClinica/citasDisponibles")
+@RequestMapping("/apiClinica/citasDisponibles")
 public class CitaDisponibleController {
 
 	
