@@ -4,11 +4,12 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Service;
 
 import com.backend.rest.entity.Receta;
 import com.backend.rest.repository.RecetaRepository;
 
-
+@Service
 public class RecetaService extends ICRUDImpl<Receta, Integer> {
 	@Autowired
 	RecetaRepository repo;
