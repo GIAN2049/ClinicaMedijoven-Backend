@@ -22,5 +22,5 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer>{
 	public abstract List<Rol> traerRolesDeUsuario(@Param("var_idUsuario")int idUsuario);
 	
 	@Query("SELECT m FROM Acceso a JOIN a.menu m where a.rol.id = ?1")
-	public List<Menu> getMenusUser(int idRol);
+	public List<Menu> getMenusUser(Integer idRol);
 }
