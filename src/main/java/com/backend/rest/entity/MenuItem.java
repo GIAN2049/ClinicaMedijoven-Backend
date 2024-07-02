@@ -1,5 +1,7 @@
 package com.backend.rest.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -21,6 +23,7 @@ public class MenuItem {
 	private Integer id;
 	
 	@ManyToOne
+	@JsonIgnore
 	@JoinColumn(name = "menu_id")
 	private Menu menu;
 	
