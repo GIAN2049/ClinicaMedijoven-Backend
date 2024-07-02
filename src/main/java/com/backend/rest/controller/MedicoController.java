@@ -30,7 +30,7 @@ import com.backend.rest.utils.ModeloNotFoundException;
 import jakarta.transaction.Transactional;
 
 @RestController
-@RequestMapping("apiClinica/medicos")
+@RequestMapping("/apiClinica/medicos")
 public class MedicoController {
 
 	@Autowired

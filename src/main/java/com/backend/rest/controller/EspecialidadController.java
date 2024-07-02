@@ -23,7 +23,7 @@ import com.backend.rest.utils.MensajeResponse;
 import com.backend.rest.utils.ModeloNotFoundException;
 
 @RestController
-@RequestMapping("apiClinicaV1/Especialidad")
+@RequestMapping("/apiClinica/Especialidad")
 public class EspecialidadController {
 
 	@Autowired

@@ -25,7 +25,7 @@ import com.backend.rest.utils.ModeloNotFoundException;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("apiClinica/medicamento")
+@RequestMapping("/apiClinica/medicamento")
 public class MedicamentoController {
 	@Autowired
 	private MedicamentoService servicioMed;

@@ -25,7 +25,7 @@ import com.backend.rest.utils.MensajeResponse;
 import com.backend.rest.utils.ModeloNotFoundException;
 
 @RestController
-@RequestMapping("apiClinica/citasMedicos")
+@RequestMapping("/apiClinica/citasMedicos")
 public class CitaMedicoController {
 	
 	@Autowired

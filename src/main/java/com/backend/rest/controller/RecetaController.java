@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController
-@RequestMapping("/receta")
+@RequestMapping("/apiClinica/receta")
 public class RecetaController {
 	@Autowired
 	private RecetaService servicioRec;
