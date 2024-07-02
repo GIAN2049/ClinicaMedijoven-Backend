@@ -1,5 +1,7 @@
 package com.backend.rest.dto;
 
+import java.util.List;
+
 import lombok.Data;
 
 @Data
@@ -17,11 +19,11 @@ public class UsuarioDTO {
 	
 	private String telefono;
 	
-	private String username;
+	private String login;
 	
 	private String password;
 	
-	private RolDTO rol;
+	private List<RolDTO> roles; 
 	
 	private String sexo;
 }
