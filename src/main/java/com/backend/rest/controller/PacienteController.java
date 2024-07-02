@@ -80,40 +80,37 @@ public class PacienteController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<?> saveUserWithMedico(@RequestBody PacienteDTO paciente){
+	public ResponseEntity<?> registrarPaciente(@RequestBody PacienteDTO bean){
 		try {
-			PacienteDTO pacienteDto = service.addUsuerWithPaciente(paciente);
-			
+			PacienteDTO pacienteRegistrado = service.registrarPaciente(bean);
 			return new ResponseEntity<>(MensajeResponse.builder()
-						.mensaje("Paciente Registrado")
-						.object(pacienteDto).build(), HttpStatus.OK
-					);
+					.mensaje("Paciente Registrado")
+					.object(pacienteRegistrado).build(), HttpStatus.OK
+				);
 		} catch (Exception e) {
 			return new ResponseEntity<>(MensajeResponse.builder()
 					.mensaje(e.getMessage())
 					.object(null).build(), HttpStatus.INTERNAL_SERVER_ERROR
 				);
 		}
-		
 	}
 	
 	@PutMapping("/actualizar")
-	public ResponseEntity<?> updateUserWithMedico(@RequestBody PacienteDTO bean){
-	
-		Optional<PacienteDTO> existPaciente = service.getPacienteId(bean.getUsuario().getId(), bean.getId());
-
+    public ResponseEntity<?> actualizarPaciente(@RequestBody PacienteDTO bean) {
+		Optional<PacienteDTO> existPaciente = service.getPacienteId(
+				bean.getUsuario().getId(), bean.getId());
 		if(existPaciente.isPresent()) {
 			
-			PacienteDTO updatePaciente = service.addUsuerWithPaciente(bean);
+			PacienteDTO pacienteActualizado =  service.actualizarPaciente(bean);
 			return new ResponseEntity<>(MensajeResponse.builder()
 					.mensaje("Paciente Actualizado Correctamente")
-					.object(updatePaciente).build(), HttpStatus.OK
+					.object(pacienteActualizado).build(), HttpStatus.OK
 				);
 			
 		} else {
 			throw new ModeloNotFoundException("El paciente con id: "+bean.getId()+" no existe");
 		}
-	}
+    }
 	
 	@Transactional
 	@DeleteMapping("/{id}")
