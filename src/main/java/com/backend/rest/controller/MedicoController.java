@@ -24,6 +24,7 @@ import com.backend.rest.dto.UsuarioDTO;
 import com.backend.rest.entity.Categoria;
 import com.backend.rest.entity.Medico;
 import com.backend.rest.serviceImpl.MedicoService;
+import com.backend.rest.serviceImpl.UsuarioHasRolService;
 import com.backend.rest.serviceImpl.UsuarioService;
 import com.backend.rest.utils.MensajeResponse;
 import com.backend.rest.utils.ModeloNotFoundException;
@@ -40,6 +41,9 @@ public class MedicoController {
 	
 	@Autowired
 	private UsuarioService usuarioService;
+	
+	@Autowired
+	private UsuarioHasRolService usuarioHasRolService;
 	
 	@Autowired
 	private ModelMapper mapper;
@@ -113,13 +117,15 @@ public class MedicoController {
 	@Transactional
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> deleteById(@PathVariable Integer id){
-		MedicoDTO medico = service.getMedicoById(id, id);
+		Medico medico = service.buscarPorId(id);
 		if(medico == null) {
 			throw new ModeloNotFoundException("Còdigo del Medico : "+id+" no existe");
 		}
 		else { 
 			service.eliminar(id);
 			usuarioService.eliminar(medico.getUsuario().getId());
+			usuarioHasRolService.deleteByUsuarioId(medico.getUsuario().getId());
+			
 		}
 		
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
