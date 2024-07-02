@@ -23,6 +23,7 @@ import com.backend.rest.entity.Categoria;
 import com.backend.rest.entity.Paciente;
 import com.backend.rest.entity.Usuario;
 import com.backend.rest.serviceImpl.PacienteService;
+import com.backend.rest.serviceImpl.UsuarioHasRolService;
 import com.backend.rest.serviceImpl.UsuarioService;
 import com.backend.rest.utils.MensajeResponse;
 import com.backend.rest.utils.ModeloNotFoundException;
@@ -40,6 +41,9 @@ public class PacienteController {
 	
 	@Autowired
 	private UsuarioService usuarioService;
+	
+	@Autowired
+	private UsuarioHasRolService usuarioHasRolService;
 	
 	@Autowired
 	private ModelMapper mapper;
@@ -124,6 +128,7 @@ public class PacienteController {
 		else { 
 			service.eliminar(id);
 			usuarioService.eliminar(paciente.getUsuario().getId());
+			usuarioHasRolService.deleteByUsuarioId(paciente.getUsuario().getId());
 		}
 		
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
