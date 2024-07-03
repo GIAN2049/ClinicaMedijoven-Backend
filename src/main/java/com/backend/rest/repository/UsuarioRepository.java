@@ -20,7 +20,14 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer>{
 	
 	@Query("Select r from Rol r, UsuarioHasRol u where r.id = u.rol.id and u.usuario.id = :var_idUsuario")
 	public abstract List<Rol> traerRolesDeUsuario(@Param("var_idUsuario")int idUsuario);
+
+	@Query("SELECT m FROM Menu m " +
+		       "JOIN Acceso a ON m.id = a.pk.id_menu " +
+		       "JOIN Rol r ON r.id = a.pk.id_rol " +
+		       "JOIN UsuarioHasRol ur ON ur.pk.id_rol = r.id " +
+		       "WHERE ur.pk.id_usuario = :userId")
+		List<Menu> findMenusByUserId(@Param("userId") int userId);
+
 	
-	@Query("SELECT m FROM Acceso a JOIN a.menu m where a.rol.id = ?1")
-	public List<Menu> getMenusUser(Integer idRol);
+
 }
