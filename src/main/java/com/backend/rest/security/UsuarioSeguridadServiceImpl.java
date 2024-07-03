@@ -35,7 +35,7 @@ public class UsuarioSeguridadServiceImpl implements UserDetailsService {
 				List<Rol> lstRol = usuarioRepository.traerRolesDeUsuario(objUsuario.getId());
 				log.info("==> Roles =========== " + lstRol);
 				
-				List<Menu> lstmenus = usuarioRepository.getMenusUser(objUsuario.getId());
+				List<Menu> lstmenus = usuarioRepository.findMenusByUserId(objUsuario.getId());
 				log.info("==> Opciones =========== " + lstmenus);
 
 				userDetails = UsuarioPrincipal.build(objUsuario, lstRol, lstmenus);

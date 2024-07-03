@@ -92,7 +92,7 @@ public class MedicoService extends ICRUDImpl<Medico, Integer>{
 			UsuarioHasRolPK pk = new UsuarioHasRolPK();
 			pk.setId_usuario(usuario.getId());
 			pk.setId_rol(rol.getId());
-			usuarioHasRol.setUsuarioHasRolPk(pk);
+			usuarioHasRol.setPk(pk);
 			usuarioHasRol.setUsuario(usuario);
 			usuarioHasRol.setRol(rol);
 			usuarioHasRolRepository.save(usuarioHasRol);
