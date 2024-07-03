@@ -1,6 +1,7 @@
 package com.backend.rest.dto;
 
-import java.time.LocalTime;
+
+import java.util.Date;
 
 import lombok.Data;
 
@@ -8,6 +9,8 @@ import lombok.Data;
 public class HistoriaClinicaDTO {
 	private int id;
 	private PacienteDTO paciente;
-	private LocalTime hora;
-	private String diagnostico, tratamientos, resutaldos;
+	private Date fechaRegistro;
+	private String diagnostico;
+	private String tratamientos;
+	private String resultadosPruebas;
 }

@@ -125,7 +125,7 @@ public class UsuarioController {
 		}
 		else { 
 			service.eliminar(id);
-			usuarioHasRolService.deleteByUsuarioId(id);
+			usuarioHasRolService.deleteByUsuarioId(usuario.getId());
 		}
 		
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);

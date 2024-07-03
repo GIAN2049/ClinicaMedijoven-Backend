@@ -36,6 +36,7 @@ public class RecetaController {
 	private RecetaService servicioRec;
 	@Autowired
 	private ModelMapper mapper;
+	
 	@GetMapping("/listar")
 	public ResponseEntity<?> listar() {
 		List<Receta> lista = servicioRec.listarTodos();

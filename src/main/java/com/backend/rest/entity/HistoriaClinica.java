@@ -34,7 +34,7 @@ public class HistoriaClinica {
 	private Paciente paciente;
 	
 	@Column(name = "fecha_registro")
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.DATE)
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")	
 	private Date fechaRegistro;
 	
