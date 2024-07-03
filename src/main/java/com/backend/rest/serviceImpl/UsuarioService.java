@@ -13,6 +13,7 @@ import com.backend.rest.dto.MedicoDTO;
 import com.backend.rest.dto.PacienteDTO;
 import com.backend.rest.dto.RolDTO;
 import com.backend.rest.dto.UsuarioDTO;
+import com.backend.rest.dto.UsuarioUpdateDTO;
 import com.backend.rest.entity.Categoria;
 import com.backend.rest.entity.Medico;
 import com.backend.rest.entity.Paciente;
@@ -77,7 +78,7 @@ public class UsuarioService extends ICRUDImpl<Usuario, Integer> {
 	}
 	
 	@Transactional
-	public UsuarioDTO actualizar(UsuarioDTO bean) {
+	public UsuarioUpdateDTO actualizar(UsuarioUpdateDTO bean) {
 		// Guardar Usuario
 		Usuario usuario = repository.findById(bean.getId()).orElseThrow(() -> new RuntimeException("User not found"));
 		mapper.map(bean, usuario);
@@ -88,19 +89,9 @@ public class UsuarioService extends ICRUDImpl<Usuario, Integer> {
 
 		// Guardar Roles
 		usuarioHasRolRepository.deleteByUsuarioId(usuario.getId());
-		for (RolDTO rolDTO : bean.getRoles()) {
-			Rol rol = rolRepository.findById(rolDTO.getId()).orElseThrow(() -> new RuntimeException("Role not found"));
-			UsuarioHasRol usuarioHasRol = new UsuarioHasRol();
-			UsuarioHasRolPK pk = new UsuarioHasRolPK();
-			pk.setId_usuario(usuario.getId());
-			pk.setId_rol(rol.getId());
-			usuarioHasRol.setUsuarioHasRolPk(pk);
-			usuarioHasRol.setUsuario(usuario);
-			usuarioHasRol.setRol(rol);
-			usuarioHasRolRepository.save(usuarioHasRol);
-		}
+		
 
-		return mapper.map(usuario, UsuarioDTO.class);
+		return mapper.map(usuario, UsuarioUpdateDTO.class);
 	}
 	
 	public Optional<UsuarioDTO> getUsuarioId(int idUsuario) {

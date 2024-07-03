@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.backend.rest.dto.PacienteDTO;
 import com.backend.rest.dto.UsuarioDTO;
+import com.backend.rest.dto.UsuarioUpdateDTO;
 import com.backend.rest.entity.Categoria;
 import com.backend.rest.entity.Paciente;
 import com.backend.rest.entity.Usuario;
@@ -100,11 +101,11 @@ public class UsuarioController {
 	}
 	
 	@PutMapping("/actualizar")
-    public ResponseEntity<?> actualizarUsuario(@RequestBody UsuarioDTO bean) {
+    public ResponseEntity<?> actualizarUsuario(@RequestBody UsuarioUpdateDTO bean) {
 		Optional<UsuarioDTO> existUsuario = service.getUsuarioId(
 				 bean.getId());
 		if(existUsuario.isPresent()) {
-			UsuarioDTO usuarioActualizado =  service.actualizar(bean);
+			UsuarioUpdateDTO usuarioActualizado =  service.actualizar(bean);
 			return new ResponseEntity<>(MensajeResponse.builder()
 					.mensaje("Usuario Actualizado Correctamente")
 					.object(usuarioActualizado).build(), HttpStatus.OK
