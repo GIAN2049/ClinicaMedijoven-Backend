@@ -57,6 +57,7 @@ public class MainSecurity   {
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(
         		auth -> auth.requestMatchers("/apiClinica/auth/**").permitAll()
+        		 .requestMatchers(HttpMethod.GET).permitAll()
         		 .requestMatchers("/apiClinica/**").permitAll()
         .anyRequest()
         .authenticated());
