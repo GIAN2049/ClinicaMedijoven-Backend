@@ -1,5 +1,7 @@
 package com.backend.rest.serviceImpl;
 
+import java.util.Optional;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -100,4 +102,9 @@ public class UsuarioService extends ICRUDImpl<Usuario, Integer> {
 
 		return mapper.map(usuario, UsuarioDTO.class);
 	}
+	
+	public Optional<UsuarioDTO> getUsuarioId(int idUsuario) {
+        return repository.findById(idUsuario)
+                .map(m -> mapper.map(m, UsuarioDTO.class));
+    }
 }
