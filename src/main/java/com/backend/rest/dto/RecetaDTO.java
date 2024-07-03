@@ -1,17 +1,17 @@
 package com.backend.rest.dto;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 import lombok.Data;
 
 @Data
 public class RecetaDTO {
-	private Integer codigo;
-	private Integer medico;
-	private Integer paciente;
-	private Integer especialidad;
-	private Integer categoria;
-	private Integer medicamento;
-	private LocalDate fecha;
-	private String detalle;
+	private Integer id;
+	private MedicoDTO medico;
+	private PacienteDTO paciente;
+	private EspecialidadDTO especialidad;
+	private CategoriaDTO categoria;
+	private MedicamentoDTO medicamento;
+	private Date fechaRegistro;
+	private String detalles;
 }

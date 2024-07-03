@@ -80,9 +80,9 @@ public class RecetaController {
 	}
 	@PutMapping("/actualizar")
 	public ResponseEntity<?> actualizar(@Valid @RequestBody RecetaDTO bean) {
-		Receta recBuscar = servicioRec.buscarPorId(bean.getCodigo());
+		Receta recBuscar = servicioRec.buscarPorId(bean.getId());
 		if (recBuscar == null)
-			throw new ModeloNotFoundException("Código de la receta: " + bean.getCodigo() + " no existe");
+			throw new ModeloNotFoundException("Código de la receta: " + bean.getId() + " no existe");
 		else {
 			Receta rec = mapper.map(bean, Receta.class);
 			Receta r = servicioRec.registrar(rec);
