@@ -9,6 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.backend.rest.dto.MedicoDTO;
+import com.backend.rest.dto.MedicoUpdateDTO;
 import com.backend.rest.dto.RolDTO;
 import com.backend.rest.entity.Especialidad;
 import com.backend.rest.entity.Medico;
@@ -69,10 +70,9 @@ public class MedicoService extends ICRUDImpl<Medico, Integer>{
 	public Medico getMedicoById(Integer idUser, Integer idDoc) {
         Medico medico = medicoRepository.getMedico(idUser, idDoc)
                                         .orElseThrow(() -> new RuntimeException("Valor no presente"));
-        
         return medico;
     }
-	
+
 	@Transactional
 	public MedicoDTO registrarMedico(MedicoDTO bean) {
 		// Save Usuario
@@ -104,7 +104,7 @@ public class MedicoService extends ICRUDImpl<Medico, Integer>{
 	
 	
 	@Transactional
-	public MedicoDTO actualizarMedico(MedicoDTO bean) {
+	public MedicoUpdateDTO actualizarMedico(MedicoUpdateDTO bean) {
 		// Actualizar Usuario
 	    Usuario usuario = usuarioRepository.findById(bean.getUsuario().getId())
 	            .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
@@ -128,21 +128,7 @@ public class MedicoService extends ICRUDImpl<Medico, Integer>{
         }
 	    		
 	    medicoRepository.save(existingMedico);
-	   
-	    // Actualizar Roles    
-	    usuarioHasRolRepository.deleteByUsuarioId(usuario.getId());
-		for (RolDTO rolDTO : bean.getUsuario().getRoles()) {
-			Rol rol = rolRepository.findById(rolDTO.getId()).orElseThrow(() -> new RuntimeException("Role not found"));
-			UsuarioHasRol usuarioHasRol = new UsuarioHasRol();
-			UsuarioHasRolPK pk = new UsuarioHasRolPK();
-			pk.setId_usuario(usuario.getId());
-			pk.setId_rol(rol.getId());
-			usuarioHasRol.setUsuarioHasRolPk(pk);
-			usuarioHasRol.setUsuario(usuario);
-			usuarioHasRol.setRol(rol);
-			usuarioHasRolRepository.save(usuarioHasRol);
-		}
 
-	    return mapper.map(existingMedico, MedicoDTO.class);
+	    return mapper.map(existingMedico, MedicoUpdateDTO.class);
 	}
 }

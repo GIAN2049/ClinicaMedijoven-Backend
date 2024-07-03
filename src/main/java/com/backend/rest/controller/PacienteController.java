@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.backend.rest.dto.PacienteDTO;
+import com.backend.rest.dto.PacienteUpdateDTO;
 import com.backend.rest.entity.Categoria;
 import com.backend.rest.entity.Paciente;
 import com.backend.rest.entity.Usuario;
@@ -102,12 +103,12 @@ public class PacienteController {
 	}
 	
 	@PutMapping("/actualizar")
-    public ResponseEntity<?> actualizarPaciente(@RequestBody PacienteDTO bean) {
+    public ResponseEntity<?> actualizarPaciente(@RequestBody PacienteUpdateDTO bean) {
 		Optional<PacienteDTO> existPaciente = service.getPacienteId(
 				bean.getUsuario().getId(), bean.getId());
 		if(existPaciente.isPresent()) {
 			
-			PacienteDTO pacienteActualizado =  service.actualizarPaciente(bean);
+			PacienteUpdateDTO pacienteActualizado =  service.actualizarPaciente(bean);
 			return new ResponseEntity<>(MensajeResponse.builder()
 					.mensaje("Paciente Actualizado Correctamente")
 					.object(pacienteActualizado).build(), HttpStatus.OK

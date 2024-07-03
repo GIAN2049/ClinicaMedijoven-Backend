@@ -9,8 +9,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.backend.rest.dto.MedicoDTO;
+import com.backend.rest.dto.MedicoUpdateDTO;
 import com.backend.rest.dto.PacienteDTO;
+import com.backend.rest.dto.PacienteUpdateDTO;
 import com.backend.rest.dto.RolDTO;
+import com.backend.rest.entity.Especialidad;
 import com.backend.rest.entity.Medico;
 import com.backend.rest.entity.Paciente;
 import com.backend.rest.entity.Rol;
@@ -22,6 +25,7 @@ import com.backend.rest.repository.RolRepository;
 import com.backend.rest.repository.UsuarioHasRolRepository;
 import com.backend.rest.repository.UsuarioRepository;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -93,37 +97,28 @@ public class PacienteService extends ICRUDImpl<Paciente, Integer>{
 	}
 	
 	@Transactional
-	public PacienteDTO actualizarPaciente(PacienteDTO bean) {
-		// Guardar Usuario
-		Usuario usuario = usuarioRepository.findById(bean.getUsuario().getId()).orElseThrow(() -> new RuntimeException("User not found"));
-		mapper.map(bean.getUsuario(), usuario);
-		if (bean.getUsuario().getPassword() != null && !bean.getUsuario().getPassword().isEmpty()) {
-			usuario.setPassword(passwordEncoder.encode(bean.getUsuario().getPassword()));
-		}
-		usuario = usuarioRepository.save(usuario);
+	public PacienteUpdateDTO actualizarPaciente(PacienteUpdateDTO bean) {
+		// Actualizar Usuario
+	    Usuario usuario = usuarioRepository.findById(bean.getUsuario().getId())
+	            .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
+
+	    // Mapea el DTO al objeto de usuario y maneja la contraseña
+	    mapper.map(bean.getUsuario(), usuario);
+	    if (bean.getUsuario().getPassword() != null && !bean.getUsuario().getPassword().isEmpty()) {
+	        usuario.setPassword(passwordEncoder.encode(bean.getUsuario().getPassword()));
+	    }
+	    usuario = usuarioRepository.save(usuario);
 
 		// Guardar Paciente
-		Paciente paciente = repository.findById(bean.getId()).orElseThrow(() -> new RuntimeException("Patient not found"));
-		mapper.map(bean, paciente);
-		paciente.setUsuario(usuario);
-		paciente = repository.save(paciente);
+		Paciente existPaciente = repository.findById(bean.getId())
+	            .orElseThrow(() -> new EntityNotFoundException("Medico not found"));
+		
+		existPaciente.setUsuario(usuario);
 
-		// Guardar Roles
-		usuarioHasRolRepository.deleteByUsuarioId(usuario.getId());
-		for (RolDTO rolDTO : bean.getUsuario().getRoles()) {
-			Rol rol = rolRepository.findById(rolDTO.getId()).orElseThrow(() -> new RuntimeException("Role not found"));
-			UsuarioHasRol usuarioHasRol = new UsuarioHasRol();
-			UsuarioHasRolPK pk = new UsuarioHasRolPK();
-			pk.setId_usuario(usuario.getId());
-			pk.setId_rol(rol.getId());
-			usuarioHasRol.setUsuarioHasRolPk(pk);
-			usuarioHasRol.setUsuario(usuario);
-			usuarioHasRol.setRol(rol);
-			usuarioHasRolRepository.save(usuarioHasRol);
-		}
+		repository.save(existPaciente);
 
-		return mapper.map(paciente, PacienteDTO.class);
+		return mapper.map(existPaciente, PacienteUpdateDTO.class);
 	}
-	
+
 	
 }

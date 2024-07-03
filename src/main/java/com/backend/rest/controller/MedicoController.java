@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.backend.rest.dto.CategoriaDTO;
 import com.backend.rest.dto.MedicoDTO;
+import com.backend.rest.dto.MedicoUpdateDTO;
 import com.backend.rest.dto.UsuarioDTO;
 import com.backend.rest.entity.Categoria;
 import com.backend.rest.entity.Medico;
@@ -67,6 +68,25 @@ public class MedicoController {
 		}
 	}
 		
+	/*
+	@GetMapping("/buscar")
+    public ResponseEntity<?> getMedicoWithUsuarioAndRoles(@RequestBody int idMedico) {
+		
+        MedicoDTO medicoDTO = service.obtenerMedicoUsuarioRoles(idMedico);
+        
+        if (medicoDTO == null) {
+        	throw new ModeloNotFoundException("Medico con id: "+idMedico+" no existe");
+		}else {
+			return new ResponseEntity<>(MensajeResponse.builder()
+					.mensaje("Registros Encontrados")
+					.object(medicoDTO).build(), HttpStatus.OK
+				);
+		}
+    }
+	*/
+	
+	
+	
 	@GetMapping("/{id}")
 	public ResponseEntity<?> getMedicoById(@PathVariable Integer id){
 		Medico medico = service.buscarPorId(id);
@@ -101,12 +121,12 @@ public class MedicoController {
     }
 	
 	@PutMapping("/actualizar")
-    public ResponseEntity<?> actualizarMedico(@RequestBody MedicoDTO medicoDTO) {
+    public ResponseEntity<?> actualizarMedico(@RequestBody MedicoUpdateDTO medicoDTO) {
 		Medico medicoExist = service.buscarPorId(medicoDTO.getId());
 		if(medicoExist == null) {
 			throw new ModeloNotFoundException("El paciente con id: "+medicoDTO.getId()+" no existe");
 		} else {
-			MedicoDTO medicoActualizado =  service.actualizarMedico(medicoDTO);
+			MedicoUpdateDTO medicoActualizado =  service.actualizarMedico(medicoDTO);
 			return new ResponseEntity<>(MensajeResponse.builder()
 					.mensaje("Paciente Actualizado Correctamente")
 					.object(medicoActualizado).build(), HttpStatus.OK
