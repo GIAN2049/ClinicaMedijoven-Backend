@@ -8,14 +8,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.backend.rest.dto.CategoriaDTO;
 import com.backend.rest.dto.CitaMedicoDTO;
+import com.backend.rest.entity.Categoria;
 import com.backend.rest.entity.CitaMedico;
 import com.backend.rest.entity.Medico;
 import com.backend.rest.entity.Paciente;
@@ -32,6 +36,9 @@ public class CitaMedicoController {
 	
 	@Autowired
 	private CitaMedicoService citaMedicoService;
+	
+	@Autowired
+	private ModelMapper mapper;
 	
 	@GetMapping
 	public ResponseEntity<?> obtenerTodasLasCitasMedicas(){
@@ -64,4 +71,56 @@ public class CitaMedicoController {
 					);
 		}
 	}
+	
+	@PostMapping("/registrar")
+	public ResponseEntity<?> registrarCita(@RequestBody CitaMedicoDTO bean){ 
+		try {
+			CitaMedico cita = mapper.map(bean, CitaMedico.class);
+			CitaMedico citaObj = citaMedicoService.registrar(cita);
+			CitaMedicoDTO citaDto = mapper.map(citaObj, CitaMedicoDTO.class);
+			
+			return new ResponseEntity<>(MensajeResponse.builder()
+					.mensaje("Cia Registrado Correctamente")
+					.object(citaDto).build(), HttpStatus.OK);
+		} catch (Exception e) {
+			// TODO: handle exception
+			return new ResponseEntity<>(MensajeResponse.builder() 
+					.mensaje(e.getMessage())
+					.object(null).build(),HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	
+	@PutMapping("/actualizar")
+	public ResponseEntity<?> actualizarCita(@RequestBody CitaMedicoDTO bean){
+		
+		CitaMedico citaBuscar = citaMedicoService.buscarPorId(bean.getId());
+		
+		if (citaBuscar == null) {
+			throw new ModeloNotFoundException("La cita con id: "+bean.getId()+" no existe");
+		} else {
+			CitaMedico cita = mapper.map(bean, CitaMedico.class);
+			CitaMedico citaObj = citaMedicoService.actualizar(cita);
+			CitaMedicoDTO citaDto = mapper.map(citaObj, CitaMedicoDTO.class);
+			return new ResponseEntity<>(MensajeResponse.builder()
+						.mensaje("Cita Actualizada Correctamente")
+						.object(citaDto).build(), HttpStatus.OK
+					);
+		}
+	}
+	
+	
+	
+	@DeleteMapping("/eliminar/{id}")
+	public ResponseEntity<Void> eliminarCita(@PathVariable Integer id) {
+		CitaMedico citaBuscar=citaMedicoService.buscarPorId(id);
+		if(citaBuscar==null)
+			throw new ModeloNotFoundException("Còdigo de la cita : "+id+" no existe");
+		else 
+			citaMedicoService.eliminar(id);
+		
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	}
+	
+	
 }
