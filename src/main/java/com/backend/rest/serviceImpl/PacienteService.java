@@ -80,6 +80,7 @@ public class PacienteService extends ICRUDImpl<Paciente, Integer>{
 		paciente.setUsuario(usuario);
 		paciente = repository.save(paciente);
 
+		
 		// Guardar Roles
 		for (RolDTO rolDTO : bean.getUsuario().getRoles()) {
 			Rol rol = rolRepository.findById(rolDTO.getId()).orElseThrow(() -> new RuntimeException("Role not found"));
@@ -92,6 +93,7 @@ public class PacienteService extends ICRUDImpl<Paciente, Integer>{
 			usuarioHasRol.setRol(rol);
 			usuarioHasRolRepository.save(usuarioHasRol);
 		}
+		 
 
 		return mapper.map(paciente, PacienteDTO.class);
 	}
