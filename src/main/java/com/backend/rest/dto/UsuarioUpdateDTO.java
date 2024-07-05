@@ -22,5 +22,7 @@ private Integer id;
 	
 	private String password;
 	
+	private List<RolDTO> roles; 
+	
 	private String sexo;
 }

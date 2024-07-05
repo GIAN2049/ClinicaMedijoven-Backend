@@ -19,12 +19,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.backend.rest.dto.PacienteDTO;
+import com.backend.rest.dto.RolDTO;
 import com.backend.rest.dto.UsuarioDTO;
 import com.backend.rest.dto.UsuarioUpdateDTO;
 import com.backend.rest.entity.Categoria;
 import com.backend.rest.entity.Paciente;
+import com.backend.rest.entity.Rol;
 import com.backend.rest.entity.Usuario;
 import com.backend.rest.serviceImpl.PacienteService;
+import com.backend.rest.serviceImpl.RolService;
 import com.backend.rest.serviceImpl.UsuarioHasRolService;
 import com.backend.rest.serviceImpl.UsuarioService;
 import com.backend.rest.utils.MensajeResponse;
@@ -45,28 +48,80 @@ public class UsuarioController {
 	private UsuarioHasRolService usuarioHasRolService;
 	
 	@Autowired
+	private RolService rolService;
+	
+	@Autowired
 	private ModelMapper mapper;
+	
+	
+	@GetMapping("/roles")
+	public ResponseEntity<?> getRoles(){
+		List<Rol> rol = rolService.listarTodos();
+		
+		if (rol.isEmpty()) {
+			   return new ResponseEntity<>(MensajeResponse.builder()
+		                .mensaje("No se encontraron registros")
+		                .object(null).build(), HttpStatus.OK
+		        );
+		} else {
+			List<RolDTO> rolDto = rol.stream()
+					.map( r -> mapper.map(r,  RolDTO.class))
+					.collect(Collectors.toList());
+			return new ResponseEntity<>(MensajeResponse.builder()
+	                .mensaje("Registros Encontrados")
+	                .object(rolDto).build(), HttpStatus.OK
+	        );
+		}
+	}
+	
+	
+	@GetMapping("/roles/{idUsuario}")
+	public ResponseEntity<?> getRolesPorIdUsuario(@PathVariable int idUsuario){
+		List<Rol> rol = service.traerRolesPorIdUsuario(idUsuario);
+		
+		if (rol.isEmpty()) {
+			   return new ResponseEntity<>(MensajeResponse.builder()
+		                .mensaje("No se encontraron registros")
+		                .object(null).build(), HttpStatus.OK
+		        );
+		} else {
+			List<RolDTO> rolDto = rol.stream()
+					.map( r -> mapper.map(r,  RolDTO.class))
+					.collect(Collectors.toList());
+			return new ResponseEntity<>(MensajeResponse.builder()
+	                .mensaje("Registros Encontrados")
+	                .object(rolDto).build(), HttpStatus.OK
+	        );
+		}
+	}
+	
 	
 	@GetMapping
 	public ResponseEntity<?> getAllUsuarios(){
-		List<Usuario> usuario = service.listarTodos();
-		
-		if (usuario.isEmpty()) {
-			
-			return new ResponseEntity<>(MensajeResponse.builder()
-						.mensaje("No se encontraron registros")
-						.object(null).build(), HttpStatus.OK
-					);
-		} else {
-			List<UsuarioDTO> usuarioDto = usuario.stream()
-					.map( p -> mapper.map(p, UsuarioDTO.class))
-					.collect(Collectors.toList());
-			
-			return new ResponseEntity<>(MensajeResponse.builder()
-					.mensaje("Registros Encontrados")
-					.object(usuarioDto).build(), HttpStatus.OK
-				);
-		}
+		List<Usuario> usuarios = service.listarUsuarioRol();
+
+	    if (usuarios.isEmpty()) {
+	        return new ResponseEntity<>(MensajeResponse.builder()
+	                .mensaje("No se encontraron registros")
+	                .object(null).build(), HttpStatus.OK
+	        );
+	    } else {
+	        List<UsuarioDTO> usuarioDto = usuarios.stream()
+	                .map(p -> {
+	                    UsuarioDTO dto = mapper.map(p, UsuarioDTO.class);
+	                    List<RolDTO> roles = p.getUsuarioHasRoles().stream()
+	                            .map(ur -> mapper.map(ur.getRol(), RolDTO.class))
+	                            .collect(Collectors.toList());
+	                    dto.setRoles(roles);
+	                    return dto;
+	                })
+	                .collect(Collectors.toList());
+
+	        return new ResponseEntity<>(MensajeResponse.builder()
+	                .mensaje("Registros Encontrados")
+	                .object(usuarioDto).build(), HttpStatus.OK
+	        );
+	    }
 	}
 	
 	
@@ -105,7 +160,7 @@ public class UsuarioController {
 		Optional<UsuarioDTO> existUsuario = service.getUsuarioId(
 				 bean.getId());
 		if(existUsuario.isPresent()) {
-			UsuarioUpdateDTO usuarioActualizado =  service.actualizar(bean);
+			UsuarioUpdateDTO usuarioActualizado =  service.actualizarUsuario(bean);
 			return new ResponseEntity<>(MensajeResponse.builder()
 					.mensaje("Usuario Actualizado Correctamente")
 					.object(usuarioActualizado).build(), HttpStatus.OK

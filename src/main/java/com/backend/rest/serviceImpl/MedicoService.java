@@ -85,6 +85,7 @@ public class MedicoService extends ICRUDImpl<Medico, Integer>{
 		medico.setUsuario(usuario);
 		medico = medicoRepository.save(medico);
 
+		
 		// Save Roles
 		for (RolDTO rolDTO : bean.getUsuario().getRoles()) {
 			Rol rol = rolRepository.findById(rolDTO.getId()).orElseThrow(() -> new RuntimeException("Role not found"));
