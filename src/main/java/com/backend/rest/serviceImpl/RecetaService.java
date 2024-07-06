@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
+import com.backend.rest.entity.Medicamento;
 import com.backend.rest.entity.Receta;
 import com.backend.rest.repository.RecetaRepository;
 
@@ -26,6 +27,10 @@ public class RecetaService extends ICRUDImpl<Receta, Integer> {
 	
 	public List<Receta> listarPorPaciente(Integer cod) {
 		return repo.findAllRecetaByPaciente(cod);
+	}
+	
+	public List<Medicamento> listarMedicamentoPorCategoria(int idCategoria){
+		return repo.findMedicamentoByIdCategoria(idCategoria);
 	}
 
 }

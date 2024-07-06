@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.backend.rest.dto.MedicamentoDTO;
 import com.backend.rest.dto.RecetaDTO;
+import com.backend.rest.entity.Medicamento;
 import com.backend.rest.entity.Receta;
 import com.backend.rest.serviceImpl.RecetaService;
 import com.backend.rest.utils.MensajeResponse;
@@ -79,6 +81,7 @@ public class RecetaController {
 					.object(null).build(),HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	
 	@PutMapping("/actualizar")
 	public ResponseEntity<?> actualizar(@Valid @RequestBody RecetaDTO bean) {
 		Receta recBuscar = servicioRec.buscarPorId(bean.getId());
@@ -93,6 +96,7 @@ public class RecetaController {
 					.object(dto).build(),HttpStatus.OK);
 		}
 	}
+	
 	@DeleteMapping("/eliminar/{codigo}")
 	public ResponseEntity<Void> eliminar(@PathVariable Integer codigo) {
 		Receta recBuscar = servicioRec.buscarPorId(codigo);
@@ -102,6 +106,7 @@ public class RecetaController {
 			servicioRec.eliminar(codigo);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
+	
 	@GetMapping("/consultaMed/{codigo}")
 	public ResponseEntity<?> consultaMed(@PathVariable Integer codigo) {
 		List<Receta> lista = servicioRec.listarPorMedico(codigo);
@@ -109,6 +114,7 @@ public class RecetaController {
 		mapper.map(r, RecetaDTO.class)).collect(Collectors.toList());
 		return new ResponseEntity<>(data,HttpStatus.OK);
 	}
+	
 	@GetMapping("/consutaPac/{codigo}")
 	public ResponseEntity<?> consultaPac(@PathVariable Integer codigo) {
 		List<Receta> lista = servicioRec.listarPorPaciente(codigo);
@@ -116,4 +122,14 @@ public class RecetaController {
 		mapper.map(r, RecetaDTO.class)).collect(Collectors.toList());
 		return new ResponseEntity<>(data,HttpStatus.OK);
 	}
+	
+	@GetMapping("/medicamento/{idCategoria}")
+	public ResponseEntity<?> listarMedicamentoPorIdCategoria(@PathVariable Integer idCategoria) {
+		List<Medicamento> lstMedicamento = servicioRec.listarMedicamentoPorCategoria(idCategoria);
+		List<MedicamentoDTO> data = lstMedicamento.stream().map(r->
+		mapper.map(r, MedicamentoDTO.class)).collect(Collectors.toList());
+		return new ResponseEntity<>(data,HttpStatus.OK);
+	}
+	
+	
 }
